@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}FarmDirect Marketplace | Fresh Farmer Produce{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+  <!-- Marketplace Header -->
+  <div class="flex items-center justify-between" style="margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark);">Farm Marketplace</h1>
+      <p class="text-muted">Direct harvest from verified organic growers and family orchards</p>
+    </div>
+    <div>
+      <span class="badge" style="background: var(--primary-subtle); color: var(--primary-dark); font-size: 0.9rem; padding: 0.5rem 1rem;">
+        Showing {{ total_count }} Fresh Items
+      </span>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls Card -->
+  <div class="filter-card">
+    <form action="{{ url_for('marketplace') }}" method="GET" id="filter-form">
+      <div class="filter-grid">
+        <!-- Search Keyword -->
+        <div class="form-group">
+          <label for="q">Search Harvest or Farmer</label>
+          <input 
+            type="text" 
+            id="q" 
+            name="q" 
+            class="form-control" 
+            placeholder="e.g. Tomatoes, Honey, Basmati, Ramesh..." 
+            value="{{ search_query }}"
+          >
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category" class="form-control">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Location Dropdown -->
+        <div class="form-group">
+          <label for="location">Farmer Location</label>
+          <select id="location" name="location" class="form-control">
+            <option value="">All Regions</option>
+            {% for loc in locations %}
+              <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Sorting -->
+        <div class="form-group">
+          <label for="sort">Sort By</label>
+          <select id="sort" name="sort" class="form-control">
+            <option value="default" {% if sort_by == 'default' %}selected{% endif %}>Featured</option>
+            <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest Harvest</option>
+          </select>
+        </div>
+
+        <!-- Submit & Reset Buttons -->
+        <div class="flex gap-2">
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+          <a href="{{ url_for('marketplace') }}" class="btn btn-secondary" title="Clear all filters">Reset</a>
+        </div>
+      </div>
+
+      <!-- Quick Category Pills and Organic Checkbox -->
+      <div class="flex items-center justify-between" style="margin-top: 1.25rem; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+        <div class="category-pills">
+          <a href="{{ url_for('marketplace', q=search_query, location=selected_location, sort=sort_by) }}" class="category-pill {% if not selected_category %}active{% endif %}">All</a>
+          {% for cat in categories %}
+            <a href="{{ url_for('marketplace', category=cat, q=search_query, location=selected_location, sort=sort_by) }}" class="category-pill {% if selected_category == cat %}active{% endif %}">
+              {{ cat }}
+            </a>
+          {% endfor %}
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; cursor: pointer;">
+            <input type="checkbox" name="organic" value="1" {% if organic_only %}checked{% endif %} onchange="document.getElementById('filter-form').submit();">
+            🌿 100% Certified Organic Only
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Products List -->
+  {% if products %}
+    <div class="product-grid">
+      {% for product in products %}
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <a href="{{ url_for('product_detail', product_id=product.id) }}">
+              <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-img" loading="lazy">
+            </a>
+            <div class="product-badges">
+              {% if product.is_organic %}
+                <span class="badge badge-organic">🌿 Organic</span>
+              {% endif %}
+              {% if product.stock <= 20 %}
+                <span class="badge badge-low-stock">Only {{ product.stock }} left</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="product-body">
+            <span class="product-category">{{ product.category }}</span>
+            <h3 class="product-title">
+              <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+            </h3>
+
+            <div class="product-farmer">
+              <span>🌾 <strong>{{ product.farm_name }}</strong></span>
+            </div>
+            <div class="text-xs text-muted" style="margin-bottom: 0.75rem;">
+              📍 {{ product.location }} &bull; Farmer: {{ product.farmer_name }}
+            </div>
+
+            <p class="text-xs text-muted" style="line-height: 1.5; margin-bottom: 1rem;">
+              {{ product.description[:90] }}{% if product.description|length > 90 %}...{% endif %}
+            </p>
+
+            <div class="product-price-row">
+              <div>
+                <span class="product-price">₹{{ "%.2f"|format(product.price) }}</span>
+                <span class="product-unit">/ {{ product.unit }}</span>
+              </div>
+              <span class="text-xs font-semibold" style="color: var(--primary);">{{ product.stock }} {{ product.unit }} in stock</span>
+            </div>
+          </div>
+
+          <div class="product-footer">
+            <form action="{{ url_for('add_to_cart') }}" method="POST" class="ajax-add-to-cart">
+              <input type="hidden" name="product_id" value="{{ product.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-primary btn-block" {% if product.stock <= 0 %}disabled{% endif %}>
+                {% if product.stock > 0 %}
+                  <span>🛒 Add to Cart</span>
+                {% else %}
+                  <span>Out of Stock</span>
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 4rem 2rem; text-align: center; margin-top: 2rem;">
+      <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔍</div>
+      <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">No Produce Found Matching Your Filters</h3>
+      <p class="text-muted" style="margin-bottom: 1.5rem;">Try clearing your search keyword, category, or region filters.</p>
+      <a href="{{ url_for('marketplace') }}" class="btn btn-primary">Reset All Filters</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

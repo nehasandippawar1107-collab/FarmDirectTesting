@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us &amp; Support | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem;">
+  <div class="text-center" style="max-width: 700px; margin: 0 auto 3rem;">
+    <span class="badge" style="background: var(--primary-subtle); color: var(--primary-dark); font-size: 0.85rem; padding: 0.35rem 1rem; margin-bottom: 0.75rem;">
+      We're Here to Help
+    </span>
+    <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 0.75rem;">
+      Get in Touch with FarmDirect
+    </h1>
+    <p class="text-muted">
+      Have a question about an order, want to partner as a farmer group, or need bulk supplies for your restaurant? Send us a message!
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; margin-bottom: 4rem;">
+    <!-- Contact Form Card -->
+    <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm);">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.5rem;">
+        Send Us a Direct Message
+      </h2>
+
+      <form action="{{ url_for('contact') }}" method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input type="text" id="name" name="name" class="form-control" required placeholder="e.g. Amit Deshmukh">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" class="form-control" required placeholder="amit@example.com">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" class="form-control" placeholder="e.g. Bulk order inquiry, Farmer partnership...">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.75rem;">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" class="form-control" rows="5" required placeholder="How can our agriculture and dispatch team help you today?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">
+          📨 Send Message to FarmDirect
+        </button>
+      </form>
+    </div>
+
+    <!-- Contact Info Cards & Support -->
+    <div>
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">📞</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.25rem;">Farmer &amp; Consumer Helpline</h4>
+            <p class="text-sm" style="color: var(--text-primary); font-weight: 600;">+91 98765 43210</p>
+            <p class="text-xs text-muted">Monday – Saturday: 7:00 AM – 8:00 PM</p>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">✉️</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.25rem;">Email Support</h4>
+            <p class="text-sm" style="color: var(--text-primary); font-weight: 600;">support@farmdirect.org</p>
+            <p class="text-xs text-muted">We reply to every email within 3 hours.</p>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">📍</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.25rem;">Agri Hub Headquarters</h4>
+            <p class="text-sm text-secondary">
+              FarmDirect Operations Center, Krishi Bhavan Link Road, Model Agro Hub, Pune, Maharashtra - 411005
+            </p>
+          </div>
+        </div>
+
+        <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-lg); padding: 1.5rem;">
+          <h4 style="color: #065f46; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">🚜 Farmer Walk-In Center:</h4>
+          <p class="text-xs" style="color: #064e3b; line-height: 1.6;">
+            Local farmers needing assistance with smartphone cataloging, harvest photography, or bank account linking can visit any of our regional cluster centers in Nashik, Shimla, and Ludhiana for free on-the-spot support.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frequently Asked Questions Accordion -->
+  <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm); margin-bottom: 3.5rem;">
+    <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 1.5rem; text-align: center;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h4 style="font-weight: 700; color: var(--primary-dark); margin-bottom: 0.5rem;">How fresh is the produce?</h4>
+        <p class="text-sm text-muted" style="line-height: 1.5;">Vegetables and fruits are plucked on the day of harvest, packed at the farm, and dispatched to your door within 24 hours.</p>
+      </div>
+
+      <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h4 style="font-weight: 700; color: var(--primary-dark); margin-bottom: 0.5rem;">How are payments remitted to farmers?</h4>
+        <p class="text-sm text-muted" style="line-height: 1.5;">Payments for confirmed orders are directly credited to the farmer's registered bank account or UPI without broker cuts.</p>
+      </div>
+
+      <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h4 style="font-weight: 700; color: var(--primary-dark); margin-bottom: 0.5rem;">What payment methods are supported?</h4>
+        <p class="text-sm text-muted" style="line-height: 1.5;">We support Cash on Delivery (COD), UPI (GPay/PhonePe/Paytm), Credit &amp; Debit Cards (Visa/Mastercard/RuPay), and Net Banking.</p>
+      </div>
+
+      <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h4 style="font-weight: 700; color: var(--primary-dark); margin-bottom: 0.5rem;">Can restaurants place bulk orders?</h4>
+        <p class="text-sm text-muted" style="line-height: 1.5;">Yes! Cafés and restaurants can contact us directly via the form above or phone to schedule recurring farm crate dispatches.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

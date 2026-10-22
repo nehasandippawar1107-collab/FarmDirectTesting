@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+  <div class="flex items-center justify-between" style="margin-bottom: 2rem;">
+    <div>
+      <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark);">Your Fresh Harvest Cart</h1>
+      <p class="text-muted">Direct farm goods reserved for your kitchen</p>
+    </div>
+    {% if cart_items %}
+      <a href="{{ url_for('clear_cart') }}" class="btn btn-secondary btn-sm" onclick="return confirm('Are you sure you want to empty your cart?');">
+        Empty Cart
+      </a>
+    {% endif %}
+  </div>
+
+  {% if cart_items %}
+    <div class="cart-layout">
+      <!-- Left: Item Table -->
+      <div>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Produce</th>
+              <th>Farmer &amp; Source</th>
+              <th>Unit Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+              <tr>
+                <td>
+                  <div class="cart-item-info">
+                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="cart-item-img">
+                    <div>
+                      <a href="{{ url_for('product_detail', product_id=item.product.id) }}" style="font-weight: 700; color: var(--text-primary);">
+                        {{ item.product.name }}
+                      </a>
+                      <div class="text-xs text-muted">{{ item.product.category }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="text-sm font-semibold" style="color: var(--primary-dark);">{{ item.product.farm_name }}</span>
+                  <div class="text-xs text-muted">{{ item.product.location }}</div>
+                </td>
+                <td>
+                  <span class="font-semibold">₹{{ "%.2f"|format(item.product.price) }}</span>
+                  <span class="text-xs text-muted">/ {{ item.product.unit }}</span>
+                </td>
+                <td>
+                  <form action="{{ url_for('update_cart') }}" method="POST" class="auto-submit-qty">
+                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                    <div class="qty-control">
+                      <button type="button" class="qty-btn qty-btn-minus">-</button>
+                      <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="qty-input" onchange="this.form.submit();">
+                      <button type="button" class="qty-btn qty-btn-plus">+</button>
+                    </div>
+                  </form>
+                </td>
+                <td>
+                  <strong style="color: var(--primary-dark); font-size: 1.05rem;">
+                    ₹{{ "%.2f"|format(item.item_total) }}
+                  </strong>
+                </td>
+                <td>
+                  <a href="{{ url_for('remove_from_cart', product_id=item.product.id) }}" style="color: #ef4444; font-size: 1.25rem; font-weight: bold; text-decoration: none;" title="Remove Item">&times;</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div style="margin-top: 1.5rem;">
+          <a href="{{ url_for('marketplace') }}" class="btn btn-secondary">
+            &larr; Continue Shopping
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Summary & Checkout Button -->
+      <div>
+        <div class="order-summary-card">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--primary-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            Order Breakdown
+          </h3>
+
+          <div class="summary-row">
+            <span>Harvest Items Total</span>
+            <strong>₹{{ "%.2f"|format(subtotal) }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Farm Express Delivery</span>
+            {% if delivery_fee == 0 %}
+              <span class="badge" style="background: #dcfce7; color: #15803d;">FREE</span>
+            {% else %}
+              <span>₹{{ "%.2f"|format(delivery_fee) }}</span>
+            {% endif %}
+          </div>
+
+          {% if subtotal < 500 %}
+            <div class="text-xs" style="background: var(--bg-surface); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); color: var(--primary-dark); margin-bottom: 1rem;">
+              💡 Add items worth <strong>₹{{ "%.2f"|format(500 - subtotal) }}</strong> more to unlock <strong>FREE Delivery!</strong>
+            </div>
+          {% endif %}
+
+          <div class="summary-row total">
+            <span>Grand Total</span>
+            <span style="color: var(--primary-dark);">₹{{ "%.2f"|format(grand_total) }}</span>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-block btn-lg">
+              Proceed to Secure Checkout &rarr;
+            </a>
+          </div>
+
+          <div class="text-center text-xs text-muted" style="margin-top: 1rem;">
+            🔒 Safe payment: COD, UPI QR, Cards &amp; Net Banking
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 4rem 2rem; text-align: center;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 0.5rem;">Your Cart is Empty</h2>
+      <p class="text-muted" style="margin-bottom: 1.5rem;">You haven't added any fresh crops or grains yet. Check out today's farm harvests!</p>
+      <a href="{{ url_for('marketplace') }}" class="btn btn-primary btn-lg">Explore Fresh Marketplace</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

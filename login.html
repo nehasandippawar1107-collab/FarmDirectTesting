@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container container-sm">
+  <div class="auth-wrapper">
+    <div class="auth-header">
+      <div class="logo-icon" style="margin: 0 auto 1rem; width: 48px; height: 48px;">🌱</div>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--primary-dark);">Welcome Back</h1>
+      <p class="text-muted text-sm">Sign in to your FarmDirect customer, farmer, or admin account</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="{{ url_for('login', next=request.args.get('next')) }}" method="POST">
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          required 
+          placeholder="yourname@example.com"
+          value="{{ email or '' }}"
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          required 
+          placeholder="••••••••"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg">
+        Sign In &rarr;
+      </button>
+    </form>
+
+    <div class="text-center text-sm" style="margin-top: 1.5rem; color: var(--text-secondary);">
+      Don't have an account yet? 
+      <a href="{{ url_for('register') }}" style="font-weight: 700; color: var(--primary);">Create Account</a>
+    </div>
+
+    <!-- 1-Click Demo Login Box (Super beginner friendly for testing in VS Code!) -->
+    <div class="demo-account-box">
+      <h5>⚡ 1-Click Demo Logins for Quick Testing:</h5>
+      <p class="text-xs text-muted" style="margin-bottom: 0.75rem;">
+        Click any button below to instantly test the platform with preset roles:
+      </p>
+      <div class="demo-btn-group">
+        <a href="{{ url_for('demo_login', role='customer') }}" class="btn btn-secondary btn-sm" style="flex: 1;">
+          👤 Demo Customer
+        </a>
+        <a href="{{ url_for('demo_login', role='farmer') }}" class="btn btn-secondary btn-sm" style="flex: 1;">
+          🌾 Demo Farmer
+        </a>
+        <a href="{{ url_for('demo_login', role='admin') }}" class="btn btn-secondary btn-sm" style="flex: 1;">
+          ⚙️ Demo Admin
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

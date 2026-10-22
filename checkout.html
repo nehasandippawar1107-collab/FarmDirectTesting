@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+  <div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark);">Direct Farm Checkout</h1>
+    <p class="text-muted">Review your order, enter delivery details, and select your payment method</p>
+  </div>
+
+  <form action="{{ url_for('checkout') }}" method="POST">
+    <div class="checkout-grid">
+      <!-- Left Column: Details & Payment -->
+      <div>
+        <!-- Shipping Address Card -->
+        <div class="checkout-card">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📍 1. Delivery &amp; Contact Details</span>
+          </h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" class="form-control" required value="{{ user.name if user else '' }}" placeholder="e.g. Priya Sharma">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" class="form-control" required value="{{ user.phone if user else '' }}" placeholder="e.g. +91 98998 87766">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="email">Email Address (for order receipts &amp; tracking) *</label>
+            <input type="email" id="email" name="email" class="form-control" required value="{{ user.email if user else '' }}" placeholder="e.g. customer@example.com">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="address">Complete Delivery Address *</label>
+            <textarea id="address" name="address" class="form-control" rows="3" required placeholder="House/Flat No., Apartment, Street, Locality, City, State, PIN Code">{{ user.address if user and user.address else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Delivery Notes (Optional)</label>
+            <input type="text" id="notes" name="notes" class="form-control" placeholder="e.g. Leave with gate security if not reachable">
+          </div>
+        </div>
+
+        <!-- Payment Method Selection Card -->
+        <div class="checkout-card">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>💳 2. Payment Method</span>
+          </h3>
+
+          <div class="payment-options-grid">
+            <!-- COD -->
+            <label class="payment-method-card selected">
+              <input type="radio" name="payment_method" value="COD" checked style="accent-color: var(--primary);">
+              <div>
+                <strong>Cash on Delivery (COD)</strong>
+                <div class="text-xs text-muted">Pay in cash upon doorstep delivery</div>
+              </div>
+            </label>
+
+            <!-- UPI -->
+            <label class="payment-method-card">
+              <input type="radio" name="payment_method" value="UPI" style="accent-color: var(--primary);">
+              <div>
+                <strong>UPI / Instant QR</strong>
+                <div class="text-xs text-muted">GPay, PhonePe, Paytm, BHIM</div>
+              </div>
+            </label>
+
+            <!-- Card -->
+            <label class="payment-method-card">
+              <input type="radio" name="payment_method" value="Card" style="accent-color: var(--primary);">
+              <div>
+                <strong>Credit / Debit Card</strong>
+                <div class="text-xs text-muted">Visa, Mastercard, RuPay</div>
+              </div>
+            </label>
+
+            <!-- Net Banking -->
+            <label class="payment-method-card">
+              <input type="radio" name="payment_method" value="NetBanking" style="accent-color: var(--primary);">
+              <div>
+                <strong>Net Banking</strong>
+                <div class="text-xs text-muted">All Indian Major Banks</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Interactive Details Boxes for each payment method -->
+          <!-- COD details -->
+          <div id="payment-details-cod" class="payment-details-box" style="display: block;">
+            <p class="text-sm">
+              💵 <strong>Cash on Delivery:</strong> Please keep exact change ready of <strong>₹{{ "%.2f"|format(grand_total) }}</strong> when the harvest delivery arrives at your door.
+            </p>
+          </div>
+
+          <!-- UPI details -->
+          <div id="payment-details-upi" class="payment-details-box" style="display: none; text-align: center;">
+            <p class="text-sm font-semibold" style="margin-bottom: 0.75rem;">Scan this QR Code with any UPI App:</p>
+            <div class="qr-code-placeholder">
+              <span style="font-size: 2.5rem;">📱</span>
+              <span>FarmDirect UPI</span>
+            </div>
+            <p class="text-xs text-muted">UPI ID: <strong>farmdirect.harvest@upi</strong></p>
+            <div class="form-group" style="max-width: 300px; margin: 0.75rem auto 0;">
+              <input type="text" class="form-control text-center" placeholder="Or enter your UPI ID (e.g. mobile@oksbi)">
+            </div>
+          </div>
+
+          <!-- Card details -->
+          <div id="payment-details-card" class="payment-details-box" style="display: none;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="text-xs font-semibold">Card Number</label>
+              <input type="text" class="form-control" placeholder="4532 •••• •••• 8890" maxlength="19">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="form-group">
+                <label class="text-xs font-semibold">Expiry Date</label>
+                <input type="text" class="form-control" placeholder="MM / YY" maxlength="5">
+              </div>
+              <div class="form-group">
+                <label class="text-xs font-semibold">CVV</label>
+                <input type="password" class="form-control" placeholder="•••" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <!-- Net Banking details -->
+          <div id="payment-details-netbanking" class="payment-details-box" style="display: none;">
+            <div class="form-group">
+              <label class="text-xs font-semibold">Select Your Bank</label>
+              <select class="form-control">
+                <option>State Bank of India (SBI)</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Punjab National Bank</option>
+                <option>Bank of Baroda</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Summary -->
+      <div>
+        <div class="order-summary-card">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            Order Items ({{ cart_items|length }})
+          </h3>
+
+          <div style="max-height: 280px; overflow-y: auto; margin-bottom: 1rem; padding-right: 0.5rem;">
+            {% for item in cart_items %}
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px dashed var(--border-color);">
+                <div>
+                  <strong style="font-size: 0.9rem;">{{ item.product.name }}</strong>
+                  <div class="text-xs text-muted">{{ item.quantity }} × ₹{{ "%.2f"|format(item.product.price) }} / {{ item.product.unit }}</div>
+                  <div class="text-xs" style="color: var(--primary);">📍 {{ item.product.farm_name }}</div>
+                </div>
+                <div class="font-bold text-sm">
+                  ₹{{ "%.2f"|format(item.item_total) }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="summary-row">
+            <span>Items Subtotal</span>
+            <strong>₹{{ "%.2f"|format(subtotal) }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Delivery Fee</span>
+            {% if delivery_fee == 0 %}
+              <span class="badge" style="background: #dcfce7; color: #15803d;">FREE</span>
+            {% else %}
+              <span>₹{{ "%.2f"|format(delivery_fee) }}</span>
+            {% endif %}
+          </div>
+
+          <div class="summary-row total">
+            <span>Grand Total</span>
+            <span style="color: var(--primary-dark);">₹{{ "%.2f"|format(grand_total) }}</span>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+              Place Direct Farm Order &rarr;
+            </button>
+          </div>
+
+          <div class="text-center text-xs text-muted" style="margin-top: 1rem;">
+            🌱 100% Guaranteed farm payout &amp; direct freshness pledge
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

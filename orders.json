@@ -1,0 +1,131 @@
+[
+  {
+    "id": "ORD-1001",
+    "customer_id": "u-customer-1",
+    "customer_name": "Priya Sharma",
+    "customer_email": "customer.priya@gmail.com",
+    "customer_phone": "+91 98998 87766",
+    "delivery_address": "Flat 402, Green Valley Apartments, Model Town, Pune, Maharashtra - 411001",
+    "items": [
+      {
+        "product_id": "prod-1",
+        "name": "Farm Fresh Vine Tomatoes",
+        "price": 35.0,
+        "quantity": 2,
+        "unit": "kg",
+        "farmer_id": "u-farmer-1",
+        "farmer_name": "Ramesh Patel",
+        "farm_name": "Green Earth Organic Farm",
+        "subtotal": 70.0
+      },
+      {
+        "product_id": "prod-2",
+        "name": "Kinnaur Royal Crisp Apples",
+        "price": 140.0,
+        "quantity": 1,
+        "unit": "kg",
+        "farmer_id": "u-farmer-2",
+        "farmer_name": "Sunita Devi",
+        "farm_name": "Himalayan Fresh Orchards",
+        "subtotal": 140.0
+      }
+    ],
+    "subtotal": 210.0,
+    "delivery_fee": 30.0,
+    "grand_total": 240.0,
+    "payment_method": "UPI",
+    "payment_status": "Paid",
+    "order_status": "Delivered",
+    "notes": "Please leave with security if doorbell not answered.",
+    "timeline": [
+      {
+        "status": "Placed",
+        "time": "2026-10-18 09:30:00",
+        "note": "Order placed successfully."
+      },
+      {
+        "status": "Confirmed",
+        "time": "2026-10-18 10:15:00",
+        "note": "Order confirmed by farmers."
+      },
+      {
+        "status": "Packed",
+        "time": "2026-10-18 15:00:00",
+        "note": "Harvest carefully packed at source farms."
+      },
+      {
+        "status": "Out for Delivery",
+        "time": "2026-10-19 08:30:00",
+        "note": "Dispatched with direct farm cold courier."
+      },
+      {
+        "status": "Delivered",
+        "time": "2026-10-19 11:45:00",
+        "note": "Delivered to customer door."
+      }
+    ],
+    "created_at": "2026-10-18 09:30:00"
+  },
+  {
+    "id": "ORD-1002",
+    "customer_id": "u-customer-1",
+    "customer_name": "Priya Sharma",
+    "customer_email": "customer.priya@gmail.com",
+    "customer_phone": "+91 98998 87766",
+    "delivery_address": "Flat 402, Green Valley Apartments, Model Town, Pune, Maharashtra - 411001",
+    "items": [
+      {
+        "product_id": "prod-4",
+        "name": "Aged Royal Basmati Rice",
+        "price": 120.0,
+        "quantity": 2,
+        "unit": "kg",
+        "farmer_id": "u-farmer-3",
+        "farmer_name": "Gurpreet Singh",
+        "farm_name": "Golden Harvest Fields",
+        "subtotal": 240.0
+      },
+      {
+        "product_id": "prod-8",
+        "name": "Wild Himalayan Raw Honey",
+        "price": 350.0,
+        "quantity": 1,
+        "unit": "500g jar",
+        "farmer_id": "u-farmer-2",
+        "farmer_name": "Sunita Devi",
+        "farm_name": "Himalayan Fresh Orchards",
+        "subtotal": 350.0
+      }
+    ],
+    "subtotal": 590.0,
+    "delivery_fee": 0.0,
+    "grand_total": 590.0,
+    "payment_method": "Credit Card",
+    "payment_status": "Paid",
+    "order_status": "Out for Delivery",
+    "notes": "Deliver in afternoon.",
+    "timeline": [
+      {
+        "status": "Placed",
+        "time": "2026-10-21 14:00:00",
+        "note": "Order placed successfully."
+      },
+      {
+        "status": "Confirmed",
+        "time": "2026-10-21 14:30:00",
+        "note": "Order confirmed by farmers."
+      },
+      {
+        "status": "Packed",
+        "time": "2026-10-21 17:30:00",
+        "note": "Packed and sealed at Golden Harvest Fields & Himalayan Orchards."
+      },
+      {
+        "status": "Out for Delivery",
+        "time": "2026-10-22 09:00:00",
+        "note": "Courier out for delivery."
+      }
+    ],
+    "created_at": "2026-10-21 14:00:00"
+  }
+]

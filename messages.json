@@ -1,0 +1,10 @@
+[
+  {
+    "id": "msg-1",
+    "name": "Amit Deshmukh",
+    "email": "amit.d@example.com",
+    "subject": "Bulk Purchase for Restaurant",
+    "message": "We run an organic café in Pune and want to source weekly 50kg tomatoes and seasonal greens directly from local farmers.",
+    "created_at": "2026-10-21 16:20:00"
+  }
+]

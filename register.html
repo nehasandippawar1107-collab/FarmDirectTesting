@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container container-sm">
+  <div class="auth-wrapper" style="max-width: 540px;">
+    <div class="auth-header">
+      <div class="logo-icon" style="margin: 0 auto 1rem; width: 48px; height: 48px;">🌱</div>
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--primary-dark);">Join FarmDirect</h1>
+      <p class="text-muted text-sm">Choose your role and become part of the farm-to-table revolution</p>
+    </div>
+
+    <!-- Role Toggle Tabs -->
+    <div class="auth-tabs" id="role-selector">
+      <div class="auth-tab {% if default_role != 'farmer' %}active{% endif %}" data-role="customer">
+        👤 I'm a Customer
+      </div>
+      <div class="auth-tab {% if default_role == 'farmer' %}active{% endif %}" data-role="farmer">
+        🌾 I'm a Farmer / Grower
+      </div>
+    </div>
+
+    <!-- Registration Form -->
+    <form action="{{ url_for('register') }}" method="POST" id="register-form">
+      <!-- Hidden Role input -->
+      <input type="hidden" name="role" id="role-input" value="{{ default_role|default('customer') }}">
+
+      <div class="form-group" style="margin-bottom: 1.1rem;">
+        <label for="name">Full Name *</label>
+        <input type="text" id="name" name="name" class="form-control" required placeholder="e.g. Ramesh Patel">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.1rem;">
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" class="form-control" required placeholder="name@domain.com">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input type="tel" id="phone" name="phone" class="form-control" required placeholder="+91 98765 43210">
+        </div>
+      </div>
+
+      <!-- Customer-Specific Fields -->
+      <div id="customer-fields" style="display: {% if default_role == 'farmer' %}none{% else %}block{% endif %};">
+        <div class="form-group" style="margin-bottom: 1.1rem;">
+          <label for="address">Delivery Address</label>
+          <input type="text" id="address" name="address" class="form-control" placeholder="House No., Street, City, State, PIN">
+        </div>
+      </div>
+
+      <!-- Farmer-Specific Fields -->
+      <div id="farmer-fields" style="display: {% if default_role == 'farmer' %}block{% else %}none{% endif %};">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.1rem;">
+          <div class="form-group">
+            <label for="farm_name">Farm or Orchard Name *</label>
+            <input type="text" id="farm_name" name="farm_name" class="form-control" placeholder="e.g. Green Earth Farm">
+          </div>
+          <div class="form-group">
+            <label for="location">Farm Location / Region *</label>
+            <input type="text" id="location" name="location" class="form-control" placeholder="e.g. Nashik, Maharashtra">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.1rem;">
+          <label for="bio">Farm Description / Crop Highlights</label>
+          <textarea id="bio" name="bio" class="form-control" rows="2" placeholder="Tell customers about your organic farming practices, harvest varieties, and experience."></textarea>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="password">Create Password (min. 6 characters) *</label>
+        <input type="password" id="password" name="password" class="form-control" required minlength="6" placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">
+        {% if default_role == 'farmer' %}
+          Register as Verified Farmer &rarr;
+        {% else %}
+          Create Customer Account &rarr;
+        {% endif %}
+      </button>
+    </form>
+
+    <div class="text-center text-sm" style="margin-top: 1.5rem; color: var(--text-secondary);">
+      Already have an account? 
+      <a href="{{ url_for('login') }}" style="font-weight: 700; color: var(--primary);">Sign In</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Tab switcher for Customer vs Farmer registration
+  const tabs = document.querySelectorAll('.auth-tab');
+  const roleInput = document.getElementById('role-input');
+  const customerFields = document.getElementById('customer-fields');
+  const farmerFields = document.getElementById('farmer-fields');
+  const submitBtn = document.getElementById('submit-btn');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const role = tab.getAttribute('data-role');
+      roleInput.value = role;
+
+      if (role === 'farmer') {
+        customerFields.style.display = 'none';
+        farmerFields.style.display = 'block';
+        submitBtn.innerHTML = 'Register as Verified Farmer &rarr;';
+      } else {
+        customerFields.style.display = 'block';
+        farmerFields.style.display = 'none';
+        submitBtn.innerHTML = 'Create Customer Account &rarr;';
+      }
+    });
+  });
+</script>
+{% endblock %}

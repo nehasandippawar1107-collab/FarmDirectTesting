@@ -1,0 +1,75 @@
+[
+  {
+    "id": "u-admin",
+    "name": "Platform Administrator",
+    "email": "admin@farmdirect.com",
+    "password_hash": "scrypt:32768:8:1$IFcybnpjRZzKce7g$9ff579f970d46a50362b24fb17a1c315fea92de1d9663c2a620b299d18f0eb7c126fbbbaf84e1bb2efefa920259d3e9e00dd204201c64b67cabbebdb224b9f2e",
+    "role": "admin",
+    "phone": "+91 98765 43210",
+    "status": "approved",
+    "created_at": "2026-01-01 10:00:00"
+  },
+  {
+    "id": "u-farmer-1",
+    "name": "Ramesh Patel",
+    "email": "farmer.ramesh@farmdirect.com",
+    "password_hash": "scrypt:32768:8:1$fhfvtQ7C4u7JZSQx$9098ddaf45d4588af186e4eb51fbccebf3d12a9cc20845b7ee6b78e2af72403493aa7183d8ecee7293d376d385f5cad5037e972239764932c9e693437b62caf5",
+    "role": "farmer",
+    "farm_name": "Green Earth Organic Farm",
+    "location": "Nashik, Maharashtra",
+    "phone": "+91 98111 22233",
+    "status": "approved",
+    "bio": "Certified organic farmer growing seasonal vegetables and vine fruits using natural compost and drip irrigation.",
+    "created_at": "2026-01-10 09:30:00"
+  },
+  {
+    "id": "u-farmer-2",
+    "name": "Sunita Devi",
+    "email": "farmer.sunita@farmdirect.com",
+    "password_hash": "scrypt:32768:8:1$fhfvtQ7C4u7JZSQx$9098ddaf45d4588af186e4eb51fbccebf3d12a9cc20845b7ee6b78e2af72403493aa7183d8ecee7293d376d385f5cad5037e972239764932c9e693437b62caf5",
+    "role": "farmer",
+    "farm_name": "Himalayan Fresh Orchards",
+    "location": "Shimla, Himachal Pradesh",
+    "phone": "+91 98222 33344",
+    "status": "approved",
+    "bio": "High altitude orchardist producing crisp apples, hill honey, and fresh mountain berries directly to your table.",
+    "created_at": "2026-02-05 11:15:00"
+  },
+  {
+    "id": "u-farmer-3",
+    "name": "Gurpreet Singh",
+    "email": "farmer.gurpreet@farmdirect.com",
+    "password_hash": "scrypt:32768:8:1$fhfvtQ7C4u7JZSQx$9098ddaf45d4588af186e4eb51fbccebf3d12a9cc20845b7ee6b78e2af72403493aa7183d8ecee7293d376d385f5cad5037e972239764932c9e693437b62caf5",
+    "role": "farmer",
+    "farm_name": "Golden Harvest Fields",
+    "location": "Ludhiana, Punjab",
+    "phone": "+91 98333 44455",
+    "status": "approved",
+    "bio": "Third-generation farmer specializing in traditional Basmati rice, cold-pressed mustard oil, and whole grains.",
+    "created_at": "2026-02-18 14:00:00"
+  },
+  {
+    "id": "u-farmer-4",
+    "name": "Kiran Rao",
+    "email": "farmer.kiran@farmdirect.com",
+    "password_hash": "scrypt:32768:8:1$fhfvtQ7C4u7JZSQx$9098ddaf45d4588af186e4eb51fbccebf3d12a9cc20845b7ee6b78e2af72403493aa7183d8ecee7293d376d385f5cad5037e972239764932c9e693437b62caf5",
+    "role": "farmer",
+    "farm_name": "Deccan Agro Greens",
+    "location": "Belagavi, Karnataka",
+    "phone": "+91 98444 55566",
+    "status": "pending",
+    "bio": "Hydroponic leafy greens and natural herbs grower requesting partner onboarding.",
+    "created_at": "2026-10-20 16:45:00"
+  },
+  {
+    "id": "u-customer-1",
+    "name": "Priya Sharma",
+    "email": "customer.priya@gmail.com",
+    "password_hash": "scrypt:32768:8:1$St08AmsrMjvPiZD9$7d80db06753635a183f6c01dbda747275e3a49f01b17d746e4a391888dcf4efab7f24e2b5d61d8ce80eb76e9900e20e3a5cf682a45ab6279937dfbe31d8c2ced",
+    "role": "customer",
+    "phone": "+91 98998 87766",
+    "address": "Flat 402, Green Valley Apartments, Model Town, Pune, Maharashtra - 411001",
+    "status": "approved",
+    "created_at": "2026-03-01 12:00:00"
+  }
+]

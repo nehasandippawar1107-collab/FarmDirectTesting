@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}FarmDirect - Direct Farmer to Customer Marketplace{% endblock %}
+
+{% block content %}
+<!-- Hero Welcome Section -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span>🌱</span> Direct Farm-to-Fork Revolution
+      </div>
+      <h1 class="hero-title">
+        Fresh Harvest Direct from <span>Local Farmers</span> to Your Doorstep.
+      </h1>
+      <p class="hero-subtitle">
+        Eliminate greedy middlemen. Support real farmers with 100% fair earnings while feeding your family crisp, pesticide-free, vine-ripened produce harvested within 24 hours.
+      </p>
+
+      <div class="hero-cta">
+        <a href="{{ url_for('marketplace') }}" class="btn btn-primary btn-lg" style="background: #a7f3d0; color: #064e3b; font-weight: 700;">
+          🛒 Explore Marketplace
+        </a>
+        <a href="{{ url_for('register', role='farmer') }}" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.15); color: white; border-color: rgba(255,255,255,0.4);">
+          🌾 Join as Farmer
+        </a>
+      </div>
+
+      <!-- Quick Search Bar inside Hero -->
+      <form action="{{ url_for('marketplace') }}" method="GET" style="max-width: 500px; display: flex; background: white; border-radius: var(--radius-full); padding: 0.35rem 0.5rem; box-shadow: var(--shadow-lg);">
+        <input 
+          type="text" 
+          name="q" 
+          placeholder="Search fresh tomatoes, organic honey, basmati..." 
+          style="flex: 1; border: none; padding: 0.6rem 1rem; border-radius: var(--radius-full); outline: none; font-size: 0.95rem;"
+          required
+        >
+        <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0.6rem 1.4rem;">
+          Search
+        </button>
+      </form>
+
+      <!-- Key Impact Statistics -->
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <h4>{{ farmers_count }}+</h4>
+          <p>Verified Farmers</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4>{{ customers_count }}+</h4>
+          <p>Happy Families</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4>{{ orders_count }}+</h4>
+          <p>Orders Delivered</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4>₹0</h4>
+          <p>Middlemen Margin</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Showcase Card -->
+    <div class="hero-side">
+      <div class="hero-card">
+        <h3>🚜 Why FarmDirect is Different</h3>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+            <div style="font-size: 1.5rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">👩‍🌾</div>
+            <div>
+              <strong style="display: block; color: var(--primary-dark);">Fair Prices to Producers</strong>
+              <p class="text-sm text-muted">Farmers earn up to 40% more than traditional mandi middlemen rates.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+            <div style="font-size: 1.5rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">🥦</div>
+            <div>
+              <strong style="display: block; color: var(--primary-dark);">Naturally Ripened &amp; Fresh</strong>
+              <p class="text-sm text-muted">No cold storage aging or artificial carbide gas ripening. Picked when ripe.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
+            <div style="font-size: 1.5rem; background: var(--primary-subtle); padding: 0.5rem; border-radius: var(--radius-md);">🚚</div>
+            <div>
+              <strong style="display: block; color: var(--primary-dark);">Traceable Harvest</strong>
+              <p class="text-sm text-muted">Know exactly which farm in Nashik, Shimla, or Punjab produced your food.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); text-align: center;">
+          <a href="{{ url_for('marketplace') }}" class="btn btn-outline btn-block btn-sm">Browse Today's Fresh Harvest &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Quick Navigation -->
+<section class="container" style="margin-bottom: 3.5rem;">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h2 style="font-size: 2rem; color: var(--primary-dark); font-weight: 800;">Browse by Category</h2>
+    <p class="text-muted">Direct from organic orchards, paddy fields, and local polyhouses</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+    <a href="{{ url_for('marketplace', category='Vegetables') }}" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; transition: all var(--transition-fast); box-shadow: var(--shadow-sm); display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+      <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">🥬</div>
+      <h3 style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700;">Vegetables</h3>
+      <p class="text-xs text-muted" style="margin-top: 0.25rem;">Tomatoes, Spinach, Onions &amp; Peppers</p>
+    </a>
+
+    <a href="{{ url_for('marketplace', category='Fruits') }}" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; transition: all var(--transition-fast); box-shadow: var(--shadow-sm); display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+      <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">🍎</div>
+      <h3 style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700;">Fresh Fruits</h3>
+      <p class="text-xs text-muted" style="margin-top: 0.25rem;">Shimla Apples, Nagpur Oranges &amp; Berries</p>
+    </a>
+
+    <a href="{{ url_for('marketplace', category='Grains') }}" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; transition: all var(--transition-fast); box-shadow: var(--shadow-sm); display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+      <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">🌾</div>
+      <h3 style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700;">Whole Grains</h3>
+      <p class="text-xs text-muted" style="margin-top: 0.25rem;">Aged Basmati Rice, Sharbati Atta &amp; Millets</p>
+    </a>
+
+    <a href="{{ url_for('marketplace', category='Dairy & Organic') }}" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; transition: all var(--transition-fast); box-shadow: var(--shadow-sm); display: block;" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+      <div style="font-size: 2.75rem; margin-bottom: 0.5rem;">🍯</div>
+      <h3 style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700;">Dairy &amp; Organic</h3>
+      <p class="text-xs text-muted" style="margin-top: 0.25rem;">Wild Honey, Cold-pressed Oils &amp; Eggs</p>
+    </a>
+  </div>
+</section>
+
+<!-- Featured Fresh Products -->
+<section class="container" style="margin-bottom: 4rem;">
+  <div class="flex items-center justify-between" style="margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h2 style="font-size: 1.85rem; color: var(--primary-dark); font-weight: 800;">Featured Fresh Harvest</h2>
+      <p class="text-muted">Hand-selected produce ready for direct express dispatch</p>
+    </div>
+    <a href="{{ url_for('marketplace') }}" class="btn btn-outline btn-sm">View Full Catalog &rarr;</a>
+  </div>
+
+  <div class="product-grid">
+    {% for product in featured_products %}
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-img" loading="lazy">
+          <div class="product-badges">
+            {% if product.is_organic %}
+              <span class="badge badge-organic">🌿 100% Organic</span>
+            {% endif %}
+            {% if product.stock <= 20 %}
+              <span class="badge badge-low-stock">Only {{ product.stock }} {{ product.unit }} left</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="product-body">
+          <span class="product-category">{{ product.category }}</span>
+          <h3 class="product-title">
+            <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+          </h3>
+          <div class="product-farmer">
+            <span>📍 {{ product.farm_name }}</span>
+          </div>
+          <p class="text-xs text-muted" style="line-height: 1.5; margin-bottom: 1rem;">
+            {{ product.description[:85] }}{% if product.description|length > 85 %}...{% endif %}
+          </p>
+
+          <div class="product-price-row">
+            <div>
+              <span class="product-price">₹{{ "%.2f"|format(product.price) }}</span>
+              <span class="product-unit">/ {{ product.unit }}</span>
+            </div>
+            <span class="text-xs font-semibold" style="color: var(--primary);">In Stock</span>
+          </div>
+        </div>
+
+        <div class="product-footer">
+          <form action="{{ url_for('add_to_cart') }}" method="POST" class="ajax-add-to-cart">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-primary btn-block">
+              <span>🛒 Add to Cart</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section style="background: white; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 4rem 0; margin-bottom: 4rem;">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <span class="badge" style="background: var(--primary-subtle); color: var(--primary-dark); font-size: 0.85rem; padding: 0.35rem 1rem; margin-bottom: 0.75rem;">Simple &amp; Direct</span>
+      <h2 style="font-size: 2.2rem; color: var(--primary-dark); font-weight: 800;">How FarmDirect Works</h2>
+      <p class="text-muted" style="max-width: 600px; margin: 0 auto;">Transparent 4-step process from farm fields straight to your cooking pot</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem;">
+      <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg);">
+        <div style="width: 64px; height: 64px; background: white; color: var(--primary); font-size: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: var(--shadow-sm); font-weight: bold; border: 2px solid var(--primary-light);">1</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Farmers List Harvest</h3>
+        <p class="text-sm text-muted">Local farmers list daily harvested crops with genuine farm gate prices and authentic photos.</p>
+      </div>
+
+      <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg);">
+        <div style="width: 64px; height: 64px; background: white; color: var(--primary); font-size: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: var(--shadow-sm); font-weight: bold; border: 2px solid var(--primary-light);">2</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">You Order Fresh</h3>
+        <p class="text-sm text-muted">Select healthy vegetables, fruits, and grains directly knowing which farm it came from.</p>
+      </div>
+
+      <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg);">
+        <div style="width: 64px; height: 64px; background: white; color: var(--primary); font-size: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: var(--shadow-sm); font-weight: bold; border: 2px solid var(--primary-light);">3</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Packed at the Farm</h3>
+        <p class="text-sm text-muted">Crops are cleaned and sustainably packed by the farmers themselves immediately after plucking.</p>
+      </div>
+
+      <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg);">
+        <div style="width: 64px; height: 64px; background: white; color: var(--primary); font-size: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: var(--shadow-sm); font-weight: bold; border: 2px solid var(--primary-light);">4</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Direct Doorstep Delivery</h3>
+        <p class="text-sm text-muted">Express dispatched straight to your home. Track every milestone live online.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Farmer Testimonial & Join Banner -->
+<section class="container" style="margin-bottom: 4rem;">
+  <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; border-radius: var(--radius-lg); padding: 3rem; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2.5rem; align-items: center;">
+    <div>
+      <span class="badge" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 1rem;">Are You a Local Farmer?</span>
+      <h2 style="font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem;">
+        Take Control of Your Harvest Pricing. Sell Directly to Customers.
+      </h2>
+      <p style="opacity: 0.9; margin-bottom: 1.75rem; font-size: 1.05rem;">
+        Join over {{ farmers_count }} verified growers across Maharashtra, Punjab, and Himachal. Zero platform listing fee, direct weekly payouts, and direct connection to thousands of recurring consumers.
+      </p>
+      <div class="flex gap-3">
+        <a href="{{ url_for('register', role='farmer') }}" class="btn btn-primary btn-lg" style="background: #fef08a; color: #713f12; font-weight: 700;">
+          Register as Farmer Now
+        </a>
+        <a href="{{ url_for('about') }}" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.15); color: white; border-color: rgba(255,255,255,0.4);">
+          Learn How It Works
+        </a>
+      </div>
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); border-radius: var(--radius-lg); padding: 2rem; border: 1px solid rgba(255,255,255,0.2);">
+      <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐️⭐️⭐️⭐️⭐️</div>
+      <p style="font-style: italic; margin-bottom: 1rem; line-height: 1.6;">
+        "Earlier the wholesale mandi agents took 35% commission and delayed payments for weeks. With FarmDirect, Pune customers buy my tomatoes and onions at honest prices and I get direct payment within 2 days!"
+      </p>
+      <strong>— Ramesh Patel</strong>
+      <div class="text-sm" style="opacity: 0.8;">Organic Farmer, Green Earth Farm, Nashik</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

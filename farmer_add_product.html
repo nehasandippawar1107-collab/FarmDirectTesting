@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{% if product %}Edit Produce: {{ product.name }}{% else %}List New Harvest{% endif %} | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container container-sm" style="padding-top: 2rem;">
+  <div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('farmer_dashboard') }}" class="btn btn-secondary btn-sm">&larr; Back to Farmer Portal</a>
+  </div>
+
+  <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow-sm);">
+    <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem; margin-bottom: 2rem;">
+      <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--primary-dark);">
+        {% if product %}✏️ Edit Produce Details{% else %}🌾 List New Produce on Marketplace{% endif %}
+      </h1>
+      <p class="text-muted text-sm">Farm: <strong>{{ farmer.farm_name }}</strong> ({{ farmer.location }})</p>
+    </div>
+
+    <form action="{% if product %}{{ url_for('farmer_edit_product', product_id=product.id) }}{% else %}{{ url_for('farmer_add_product') }}{% endif %}" method="POST">
+      
+      <!-- Produce Name -->
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="name">Produce Name *</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-control" 
+          required 
+          placeholder="e.g. Farm Fresh Crisp Baby Spinach"
+          value="{{ product.name if product else '' }}"
+        >
+      </div>
+
+      <!-- Category & Unit -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; margin-bottom: 1.25rem;">
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <select id="category" name="category" class="form-control" required>
+            <option value="Vegetables" {% if product and product.category == 'Vegetables' %}selected{% endif %}>Vegetables</option>
+            <option value="Fruits" {% if product and product.category == 'Fruits' %}selected{% endif %}>Fruits</option>
+            <option value="Grains" {% if product and product.category == 'Grains' %}selected{% endif %}>Grains</option>
+            <option value="Dairy & Organic" {% if product and product.category == 'Dairy & Organic' %}selected{% endif %}>Dairy &amp; Organic</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="unit">Measuring Unit *</label>
+          <select id="unit" name="unit" class="form-control" required>
+            <option value="kg" {% if product and product.unit == 'kg' %}selected{% endif %}>kg</option>
+            <option value="bunch" {% if product and product.unit == 'bunch' %}selected{% endif %}>bunch</option>
+            <option value="pack of 6" {% if product and product.unit == 'pack of 6' %}selected{% endif %}>pack of 6</option>
+            <option value="liter" {% if product and product.unit == 'liter' %}selected{% endif %}>liter</option>
+            <option value="500g jar" {% if product and product.unit == '500g jar' %}selected{% endif %}>500g jar</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Price & Stock -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+        <div class="form-group">
+          <label for="price">Price (₹ per unit) *</label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            class="form-control" 
+            step="0.5" 
+            min="1" 
+            required 
+            placeholder="e.g. 40"
+            value="{{ product.price if product else '' }}"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Available Stock Units *</label>
+          <input 
+            type="number" 
+            id="stock" 
+            name="stock" 
+            class="form-control" 
+            min="0" 
+            required 
+            placeholder="e.g. 100"
+            value="{{ product.stock if product else '50' }}"
+          >
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="description">Produce Description &amp; Freshness Details *</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          class="form-control" 
+          rows="3" 
+          required 
+          placeholder="Mention how it was grown, harvest time, taste, texture, and organic certifications."
+        >{{ product.description if product else '' }}</textarea>
+      </div>
+
+      <!-- Image URL -->
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label for="image_url">Image URL</label>
+        <input 
+          type="url" 
+          id="image_url" 
+          name="image_url" 
+          class="form-control" 
+          placeholder="https://images.unsplash.com/..."
+          value="{{ product.image_url if product else '' }}"
+        >
+        <span class="text-xs text-muted">Leave blank to use a high-quality category default photo.</span>
+      </div>
+
+      <!-- Preset Image Quick Pickers -->
+      <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid #d1ebd4;">
+        <div class="text-xs font-semibold" style="margin-bottom: 0.5rem; color: var(--primary-dark);">Or Pick a One-Click High-Res Photo:</div>
+        <div class="flex gap-2" style="flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('image_url').value='https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80';">🍅 Tomatoes</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('image_url').value='https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600&auto=format&fit=crop&q=80';">🍎 Apples</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('image_url').value='https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80';">🥬 Spinach</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('image_url').value='https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80';">🌾 Basmati Rice</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('image_url').value='https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80';">🍯 Raw Honey</button>
+        </div>
+      </div>
+
+      <!-- Organic Checkbox -->
+      <div class="form-group" style="margin-bottom: 2rem;">
+        <label style="display: flex; align-items: center; gap: 0.65rem; font-weight: 600; cursor: pointer;">
+          <input 
+            type="checkbox" 
+            name="is_organic" 
+            value="1" 
+            {% if product and product.is_organic %}checked{% elif not product %}checked{% endif %}
+            style="width: 18px; height: 18px; accent-color: var(--primary);"
+          >
+          <span>🌿 100% Certified Organic (pesticide &amp; chemical-free)</span>
+        </label>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="submit" class="btn btn-primary btn-lg" style="flex: 1;">
+          {% if product %}Update Produce Details{% else %}Publish Produce to Marketplace{% endif %}
+        </button>
+        <a href="{{ url_for('farmer_dashboard') }}" class="btn btn-secondary btn-lg">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Portal | FarmDirect{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem;">
+  <!-- Farmer Welcome Banner -->
+  <div style="background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge" style="background: rgba(255,255,255,0.2); color: white; margin-bottom: 0.5rem;">Verified Farmer Portal</span>
+      <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem;">
+        Welcome, {{ farmer.name }}!
+      </h1>
+      <p style="opacity: 0.9; font-size: 0.95rem;">
+        🌾 <strong>{{ farmer.farm_name }}</strong> &bull; 📍 {{ farmer.location }} &bull; Direct Farm Earnings
+      </p>
+    </div>
+    <div>
+      <a href="{{ url_for('farmer_add_product') }}" class="btn btn-primary btn-lg" style="background: #fef08a; color: #713f12; font-weight: 700;">
+        + List New Produce
+      </a>
+    </div>
+  </div>
+
+  <!-- Key Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon green">💰</div>
+      <div>
+        <div class="stat-val">₹{{ "%.2f"|format(total_revenue) }}</div>
+        <div class="stat-lbl">Total Direct Earnings</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon blue">📦</div>
+      <div>
+        <div class="stat-val">{{ orders|length }}</div>
+        <div class="stat-lbl">Customer Orders</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon purple">🥦</div>
+      <div>
+        <div class="stat-val">{{ total_products }}</div>
+        <div class="stat-lbl">Active Produce Items</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon amber">⚠️</div>
+      <div>
+        <div class="stat-val">{{ low_stock_count }}</div>
+        <div class="stat-lbl">Low Stock Alerts (&le;20)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Catalog Table -->
+  <div class="dashboard-card">
+    <div class="flex justify-between items-center" style="margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+      <div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-dark);">My Listed Produce &amp; Inventory</h2>
+        <p class="text-xs text-muted">Update pricing, update stock levels, or manage availability</p>
+      </div>
+      <a href="{{ url_for('farmer_add_product') }}" class="btn btn-primary btn-sm">+ Add New Produce</a>
+    </div>
+
+    {% if products %}
+      <div style="overflow-x: auto;">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>Produce</th>
+              <th>Category</th>
+              <th>Price / Unit</th>
+              <th>Available Stock</th>
+              <th>Organic</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prod in products %}
+              <tr>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <img src="{{ prod.image_url }}" alt="{{ prod.name }}" style="width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border-color);">
+                    <div>
+                      <strong style="color: var(--text-primary);">{{ prod.name }}</strong>
+                      <div class="text-xs text-muted">ID: {{ prod.id }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge" style="background: var(--bg-surface); color: var(--text-secondary);">{{ prod.category }}</span></td>
+                <td><strong style="color: var(--primary-dark);">₹{{ "%.2f"|format(prod.price) }}</strong> / {{ prod.unit }}</td>
+                <td>
+                  {% if prod.stock <= 20 %}
+                    <span class="badge badge-low-stock">{{ prod.stock }} {{ prod.unit }} (Low)</span>
+                  {% else %}
+                    <span class="badge" style="background: #dcfce7; color: #15803d;">{{ prod.stock }} {{ prod.unit }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if prod.is_organic %}
+                    <span style="color: #15803d; font-weight: bold;">✓ Yes</span>
+                  {% else %}
+                    <span class="text-muted">No</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="flex gap-2">
+                    <a href="{{ url_for('farmer_edit_product', product_id=prod.id) }}" class="btn btn-secondary btn-sm" title="Edit Price & Stock">
+                      ✏️ Edit
+                    </a>
+                    <form action="{{ url_for('farmer_delete_product', product_id=prod.id) }}" method="POST" onsubmit="return confirm('Delete {{ prod.name }} from your catalog?');" style="display: inline;">
+                      <button type="submit" class="btn btn-danger btn-sm" title="Remove produce">
+                        🗑️ Delete
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 2.5rem; background: var(--bg-surface); border-radius: var(--radius-md);">
+        <p class="text-muted" style="margin-bottom: 1rem;">You have not listed any crops yet.</p>
+        <a href="{{ url_for('farmer_add_product') }}" class="btn btn-primary btn-sm">+ List Your First Harvest</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Received Customer Orders -->
+  <div class="dashboard-card">
+    <div style="margin-bottom: 1.25rem;">
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary-dark);">Incoming Customer Orders</h2>
+      <p class="text-xs text-muted">Update dispatch status directly as you pack and ship the produce</p>
+    </div>
+
+    {% if orders %}
+      <div style="overflow-x: auto;">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>Order ID &amp; Date</th>
+              <th>Customer</th>
+              <th>Items Ordered</th>
+              <th>Your Share</th>
+              <th>Current Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ord in orders %}
+              <tr>
+                <td>
+                  <strong>#{{ ord.order_id }}</strong>
+                  <div class="text-xs text-muted">{{ ord.created_at }}</div>
+                </td>
+                <td>
+                  <strong>{{ ord.customer_name }}</strong>
+                  <div class="text-xs text-muted">📞 {{ ord.customer_phone }}</div>
+                  <div class="text-xs text-muted" style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ ord.delivery_address }}">
+                    📍 {{ ord.delivery_address }}
+                  </div>
+                </td>
+                <td>
+                  {% for item in ord['items'] %}
+                    <div class="text-xs">
+                      • <strong>{{ item.quantity }} {{ item.unit }}</strong> of {{ item.name }}
+                    </div>
+                  {% endfor %}
+                </td>
+                <td>
+                  <strong style="color: var(--primary-dark);">₹{{ "%.2f"|format(ord.total_amount) }}</strong>
+                </td>
+                <td>
+                  <span class="badge" style="background: var(--primary-subtle); color: var(--primary-dark);">
+                    {{ ord.order_status }}
+                  </span>
+                </td>
+                <td>
+                  <form action="{{ url_for('farmer_update_order_status', order_id=ord.order_id) }}" method="POST" style="display: flex; gap: 0.5rem; align-items: center;">
+                    <select name="status" class="form-control" style="padding: 0.35rem 0.5rem; font-size: 0.85rem; width: auto;">
+                      <option value="Confirmed" {% if ord.order_status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                      <option value="Packed" {% if ord.order_status == 'Packed' %}selected{% endif %}>Packed</option>
+                      <option value="Out for Delivery" {% if ord.order_status == 'Out for Delivery' %}selected{% endif %}>Out for Delivery</option>
+                      <option value="Delivered" {% if ord.order_status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 2.5rem; background: var(--bg-surface); border-radius: var(--radius-md);">
+        <p class="text-muted">No orders received for your produce yet. When customers buy your crops, orders appear here!</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
